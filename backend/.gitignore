@@ -1,0 +1,10 @@
+# Ignore specific files
+.env
+package-lock.json
+
+dist
+# Ignore directories
+/dist
+/node_modules
+/build
+/coverage
