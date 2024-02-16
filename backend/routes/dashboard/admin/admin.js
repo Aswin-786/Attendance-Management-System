@@ -54,19 +54,13 @@ router.get("/staffdetails", authenticateUser, restrictToRole('admin') , async (r
 });
 
 
-router.put("/leavestatus/:userId", authenticateUser, restrictToRole('admin'), async (req, res) => {
-  const { userId } = req.params;
+router.put("/leavestatus/:leaveRequestId", authenticateUser, restrictToRole('admin'), async (req, res) => {
+  const { leaveRequestId } = req.params;
   const { status } = req.body;
 
   try {
-    // Find the worker based on the user ID
-    const worker = await Staff.findById(userId);
-    if (!worker) {
-      return res.status(404).json({ message: "Worker not found for this user" });
-    }
-
-    // Find and update the leave request status for the worker
-    await LeaveRequest.updateMany({ worker: worker._id }, { $set: { status } });
+    // Update the status of the specific leave request
+    await LeaveRequest.findByIdAndUpdate(leaveRequestId, { status });
 
     res.status(200).json({ message: "Leave request status updated successfully" });
   } catch (error) {

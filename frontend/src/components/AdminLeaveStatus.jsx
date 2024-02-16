@@ -87,7 +87,7 @@ const AdminLeaveStatus = () => {
                 <td className="border px-4 py-2">
                   <button
                     onClick={() =>
-                      handleStatusUpdate(request.worker._id, "accepted")
+                      handleStatusUpdate(request._id, "accepted")
                     }
                     className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
                   >
@@ -95,7 +95,7 @@ const AdminLeaveStatus = () => {
                   </button>
                   <button
                     onClick={() =>
-                      handleStatusUpdate(request.worker._id, "rejected")
+                      handleStatusUpdate(request._id, "rejected")
                     }
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                   >
