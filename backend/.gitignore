@@ -1,7 +1,7 @@
 # Ignore specific files
 .env
 package-lock.json
-
+humblx.pem
 dist
 # Ignore directories
 /dist
