@@ -9,6 +9,7 @@ const ViewStaff = ({ userId }) => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [reportData, setReportData] = useState(null);
   const [loadingReport, setLoadingReport] = useState(false);
+  const [selectedMonth, setSelectedMonth] = useState(null);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -71,6 +72,43 @@ const ViewStaff = ({ userId }) => {
     }
   };
 
+  const handleMonthChange = (event) => {
+    setSelectedMonth(event.target.value);
+  };
+
+ const filterReportByMonth = (reportType) => {
+   if (!reportData) return [];
+   const data =
+     reportType === "attendance"
+       ? reportData.attendanceData
+       : reportData.leaveRequests;
+   if (!selectedMonth) return data;
+
+   return data.filter((item) => {
+     const month =
+       new Date(
+         reportType === "attendance" ? item.date : item.leaveDate
+       ).getMonth() + 1;
+     return month === parseInt(selectedMonth);
+   });
+ };
+
+  // Array of month names
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   return (
     <div className="max-w-md mx-auto border mt-5 p-4 rounded-md border-gray-300">
       <h2 className="text-xl font-bold mb-4 text-center underline py-5 ">
@@ -103,8 +141,26 @@ const ViewStaff = ({ userId }) => {
 
       {reportData && (
         <div className="mt-5">
+          <div className="mb-4">
+            <label htmlFor="monthSelect" className="mr-2">
+              Select Month:
+            </label>
+            <select
+              id="monthSelect"
+              onChange={handleMonthChange}
+              className="border border-gray-300 rounded px-2 py-1"
+            >
+              <option value="">All</option>
+              {monthNames.map((month, index) => (
+                <option key={index} value={index + 1}>
+                  {month}
+                </option>
+              ))}
+            </select>
+          </div>
+
           <h2 className="text-xl font-bold mb-4 text-center underline py-5 ">
-            Report
+            Attendance Report
           </h2>
           <div className="overflow-x-auto">
             <table className="table-auto border-collapse border border-gray-800 w-full">
@@ -121,7 +177,7 @@ const ViewStaff = ({ userId }) => {
                 </tr>
               </thead>
               <tbody>
-                {reportData.attendanceData.map((attendance) => (
+                {filterReportByMonth("attendance").map((attendance) => (
                   <tr key={attendance._id}>
                     <td className="border border-gray-800 px-4 py-2">
                       {attendance.date}
@@ -142,7 +198,7 @@ const ViewStaff = ({ userId }) => {
           </div>
 
           <h2 className="text-xl font-bold mb-4 text-center underline py-5 ">
-            Leave Requests
+            Leave Report
           </h2>
           <div className="overflow-x-auto">
             <table className="table-auto border-collapse border border-gray-800 w-full">
@@ -154,7 +210,7 @@ const ViewStaff = ({ userId }) => {
                 </tr>
               </thead>
               <tbody>
-                {reportData.leaveRequests.map((leaveRequest) => (
+                {filterReportByMonth("leave").map((leaveRequest) => (
                   <tr key={leaveRequest._id}>
                     <td className="border border-gray-800 px-4 py-2">
                       {leaveRequest.leaveDate}

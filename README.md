@@ -22,6 +22,7 @@ Attendance Management System is a web application designed for managing attendan
 - Approving or rejecting leave requests.
 - Viewing staff attendance in graphical charts.
 - Generating staff attendance report 
+- Filtering the reports according to the month
 - Logout functionality.
 
 ## Deployment
