@@ -38,7 +38,7 @@ const Header = () => {
       <div className="flex gap-2">
         {userName ? (
           <>
-            <Link to={`/user/${userId}`}>{userName}</Link>
+            {userName}
             <span>({userRole})</span>
             <button onClick={handleLogout}>Logout</button>
           </>

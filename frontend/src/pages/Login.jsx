@@ -11,7 +11,7 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: "t@t.com",
     password: "123456",
-    role: "", // For storing selected role (admin/staff)
+    role: "admin", 
   });
   const navigate = useNavigate();
 

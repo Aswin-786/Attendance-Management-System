@@ -7,12 +7,18 @@ import { BASE_URL } from "../shared/config";
 const LeaveStatus = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const userId = useRecoilValue(userIdState);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchLeaveRequests = async () => {
       try {
         const response = await axios.get(
-          `${BASE_URL}/dashboard/staff/leave-status/${userId}`
+          `${BASE_URL}/dashboard/staff/leave-status/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
         const sortedRequests = response.data.sort((a, b) => {
           return new Date(a.leaveDate) - new Date(b.leaveDate);
