@@ -29,6 +29,8 @@ const Graph = ({ attendanceData }) => {
 
   return (
     <div className="p-4 md:p-8">
+      <hr className="my-4 border-t-2 border-gray-500" />
+      <h2 className="text-center font-bold text-xl underline py-4">Graph</h2>
       <div className="mb-4 text-center">
         <label className="mr-2">Start Date:</label>
         <input

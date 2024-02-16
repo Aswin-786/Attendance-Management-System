@@ -87,4 +87,25 @@ router.get("/attendance/:userId", authenticateUser, restrictToRole('admin'), asy
   }
 });
 
+// Route to generate a report for a particular user
+router.get("/report/:userId", authenticateUser, restrictToRole('admin'), async (req, res) => {
+  try {
+    const { userId } = req.params;
+    // Fetch user's attendance data
+    const attendanceData = await Attendance.find({ worker: userId });
+    // Fetch user's leave requests
+    const leaveRequests = await LeaveRequest.find({ worker: userId, status:'accepted' });
+    // Combine attendance and leave request data as needed for the report
+    const report = {
+      userId,
+      attendanceData,
+      leaveRequests
+    };
+    res.status(200).json(report);
+  } catch (error) {
+    console.error("Error generating report:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 module.exports = router;
