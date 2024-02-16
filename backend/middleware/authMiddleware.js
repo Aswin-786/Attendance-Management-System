@@ -10,7 +10,8 @@ const authenticateUser = (req, res, next) => {
       if (err) {
         return res.status(401).json({ message: "Unauthorized" });
       }
-      req.user = decoded; // Set user information including role in the request object
+      //setting the user information
+      req.user = decoded; 
       console.log(req.user);
       next();
     });
@@ -23,9 +24,9 @@ const authenticateUser = (req, res, next) => {
 const restrictToRole = (role) => {
   return (req, res, next) => {
     if (req.user && req.user.role === role) {
-      next(); // User has the required role, allow access
+      next(); 
     } else {
-      res.status(403).json({ message: "Forbidden" }); // User does not have the required role
+      res.status(403).json({ message: "Forbidden" }); 
     }
   };
 };

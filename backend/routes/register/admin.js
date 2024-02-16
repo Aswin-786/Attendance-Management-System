@@ -10,19 +10,19 @@ const SECRET_KEY = "admin";
 // Route for registering administrators
 router.post("/", async (req, res) => {
   const { username, email, password, adminKey } = req.body;
-  // Check if admin key is valid
+  // Check if admin key is valid , for protecting the admin 
   if (adminKey !== "abcd") {
     return res.status(400).json({ message: "Invalid admin key" });
   }
 
   try {
-    // Check if email is already registered as admin
+    // Check email is already registered as admin
     const existingAdmin = await Admin.findOne({ email });
     if (existingAdmin) {
       return res.status(400).json({ message: "Email is already registered as admin" });
     }
 
-    // Check if email is already registered as staff
+    // Check  email is already registered as staff
     const existingStaff = await Staff.findOne({ email });
     if (existingStaff) {
       return res.status(400).json({ message: "Email is already registered as staff" });

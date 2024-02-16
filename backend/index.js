@@ -3,9 +3,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 const cors = require("cors");
 const mongoose = require("mongoose");
-// const cookieParser = require("cookie-parser");
-// const userRouter = require("./routes/user");
-// const postRouter = require("./routes/post");
 const { authenticateUser, restrictToRole } = require('./middleware/authMiddleware');
 const staffRouter = require("./routes/dashboard/staff/staff");
 const adminRouter = require("./routes/dashboard/admin/admin");
@@ -27,7 +24,7 @@ if (!mongoUrl) {
 }
 mongoose.connect(mongoUrl);
 
-
+//admin login
 app.use("/register/admin", require("./routes/register/admin"));
 
 // Register/Staff route
@@ -39,14 +36,18 @@ app.use("/login/admin", require("./routes/login/admin"));
 // Login/Staff route
 app.use("/login/staff", require("./routes/login/staff"));
 
+//for checking the user
 app.use("/profile", authenticateUser, require("./routes/profile/profile"));
 
+//for all dashboard for staff
 app.use("/dashboard/staff", staffRouter);
+
+//for all dashboard for admin
 app.use("/dashboard/admin", adminRouter);
 
-
+//for test
 app.get("/", (req, res) => {
-  res.status(200).json({ message: "test test 10" });
+  res.status(200).json({ message: "test" });
 });
 
 app.listen(4000, () => {
