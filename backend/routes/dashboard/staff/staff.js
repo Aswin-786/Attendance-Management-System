@@ -10,11 +10,10 @@ router.post("/attendance/:userId", authenticateUser, restrictToRole('staff'), as
   const { userId } = req.params;
   const { date, checkIn, checkOut, totalHours } = req.body;
   try {
-    // Check if there is an approved leave request for this date
-    const x = await LeaveRequest.findOne({ worker: userId, leaveDate: date });
-    const leaveRequest = await LeaveRequest.findOne({ worker: userId, leaveDate: date, status: 'accepted' });
+    // Check if there is an approved or pending leave request for this date
+    const leaveRequest = await LeaveRequest.findOne({ worker: userId, leaveDate: date, status: { $in: ['accepted', 'pending'] } });
     if (leaveRequest) {
-      return res.status(400).json({ message: "Attendance cannot be marked for an approved leave date" });
+      return res.status(400).json({ message: "Attendance cannot be marked for a leave date" });
     }
 
     // Check if attendance data for this date already exists
@@ -38,7 +37,6 @@ router.post("/attendance/:userId", authenticateUser, restrictToRole('staff'), as
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 // Route to submit leave request
 router.post("/leave-request/:userId", authenticateUser, restrictToRole('staff'), async (req, res) => {
