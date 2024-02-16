@@ -12,39 +12,45 @@ const AttendanceMarker = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const userId = useRecoilValue(userIdState);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Calculate total hours
-    if (!checkIn || !checkOut) {
-      setErrorMessage("Please select both check-in and check-out times.");
-      return;
-    }
-    const totalHours = calculateTotalHours(checkIn, checkOut);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  // Calculate total hours
+  if (!checkIn || !checkOut) {
+    setErrorMessage("Please select both check-in and check-out times.");
+    return;
+  }
+  const totalHours = calculateTotalHours(checkIn, checkOut);
 
-    // Make API call to save attendance
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/dashboard/staff/attendance/${userId}`,
-        {
-          checkIn,
-          checkOut,
-          date,
-          totalHours,
+  // Make API call to save attendance
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/dashboard/staff/attendance/${userId}`,
+      {
+        checkIn,
+        checkOut,
+        date,
+        totalHours,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
         },
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }
-      );
-      setSuccessMessage(`Attendance saved successfully`);
-      setErrorMessage("");
-    } catch (error) {
+      }
+    );
+    setSuccessMessage(`Attendance saved successfully`);
+    setErrorMessage("");
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      // Extract error message from the response
+      const errorMessage = error.response.data.message;
+      setErrorMessage(errorMessage);
+    } else {
       setErrorMessage("Error saving attendance. Please try again later.");
-      console.error("Error saving attendance:", error);
-      setSuccessMessage("");
     }
-  };
+    console.error("Error saving attendance:", error);
+    setSuccessMessage("");
+  }
+};
 
   const calculateTotalHours = (checkIn, checkOut) => {
     // Calculate total milliseconds
