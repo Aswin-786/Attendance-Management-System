@@ -53,12 +53,14 @@ const ViewStaff = ({ userId }) => {
 
 
   return (
-    <div className="max-w-md mx-auto">
-      <h2 className="text-xl font-bold mb-4 text-center">User Details</h2>
+    <div className="max-w-md mx-auto border mt-5 p-4 rounded-md border-gray-300">
+      <h2 className="text-xl font-bold mb-4 text-center underline py-5 ">
+        User Details
+      </h2>
       {error ? (
         <p className="text-red-500">{error}</p>
       ) : userData ? (
-        <div>
+        <div className="m-2 border rounded-md p-3 border-gray-300 flex flex-col gap-2">
           <p>
             <strong>Username:</strong> {userData.username}
           </p>

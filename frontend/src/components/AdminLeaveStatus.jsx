@@ -78,9 +78,9 @@ const AdminLeaveStatus = () => {
                 className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
               >
                 <td className="border px-4 py-2">{index + 1}</td>
-                <td className="border px-4 py-2">{request.worker.username}</td>
-                <td className="border px-4 py-2">{request.leaveDate}</td>
-                <td className="border px-4 py-2">{request.type}</td>
+                <td className="border px-4 py-2">{request?.worker?.username}</td>
+                <td className="border px-4 py-2">{request?.leaveDate}</td>
+                <td className="border px-4 py-2">{request?.type}</td>
                 <td className="border px-4 py-2">
                   <button
                     onClick={() =>

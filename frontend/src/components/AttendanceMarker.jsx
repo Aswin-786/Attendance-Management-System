@@ -8,18 +8,19 @@ const AttendanceMarker = () => {
   const [date, setDate] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const userId = useRecoilValue(userIdState);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Calculate total hours
     if (!checkIn || !checkOut) {
-      alert("Please select both check-in and check-out times.");
+      setErrorMessage("Please select both check-in and check-out times.");
       return;
     }
     const totalHours = calculateTotalHours(checkIn, checkOut);
 
-    console.log(checkInAMPM);
     // Make API call to save attendance
     try {
       const response = await axios.post(
@@ -27,8 +28,6 @@ const AttendanceMarker = () => {
         {
           checkIn,
           checkOut,
-          checkInAMPM,
-          checkOutAMPM,
           date,
           totalHours,
         },
@@ -38,19 +37,18 @@ const AttendanceMarker = () => {
           },
         }
       );
-      console.log("Attendance saved successfully:", response.data);
+      setSuccessMessage(`Attendance saved successfully`);
+      setErrorMessage("");
     } catch (error) {
+      setErrorMessage("Error saving attendance. Please try again later.");
       console.error("Error saving attendance:", error);
+      setSuccessMessage("");
     }
   };
 
   const calculateTotalHours = (checkIn, checkOut) => {
-    // Parse check-in and check-out times
-    const checkInTime = parseTime(checkIn);
-    const checkOutTime = parseTime(checkOut);
-
     // Calculate total milliseconds
-    const totalMilliseconds = checkOutTime - checkInTime;
+    const totalMilliseconds = parseTime(checkOut) - parseTime(checkIn);
 
     // If check-out is before check-in (crossing midnight), add a day to totalMilliseconds
     if (totalMilliseconds < 0) {
@@ -63,8 +61,7 @@ const AttendanceMarker = () => {
 
   const parseTime = (time) => {
     const [hours, minutes] = time.split(":").map(Number);
-    const milliseconds = (hours * 60 + minutes) * 60 * 1000;
-    return milliseconds;
+    return hours * 60 * 60 * 1000 + minutes * 60 * 1000;
   };
 
   // Determine AM or PM for check-in and check-out based on the entered time
@@ -78,9 +75,18 @@ const AttendanceMarker = () => {
 
   const checkInAMPM = inferAMPM(checkIn);
   const checkOutAMPM = inferAMPM(checkOut);
+
   return (
     <div className="max-w-md mx-auto bg-white shadow-md p-6 rounded-lg md:my-8 my-3">
-      <h2 className="text-xl font-bold mb-4 underline text-center">Attendance Register</h2>
+      <h2 className="text-xl font-bold mb-4 underline text-center">
+        Attendance Register
+      </h2>
+      {errorMessage && (
+        <p className="text-red-500 text-center mb-4">{errorMessage}</p>
+      )}
+      {successMessage && (
+        <p className="text-green-500 text-center mb-4">{successMessage}</p>
+      )}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block mb-1">Date:</label>

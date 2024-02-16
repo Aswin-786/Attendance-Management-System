@@ -29,7 +29,7 @@ const Graph = ({ attendanceData }) => {
 
   return (
     <div className="p-4 md:p-8">
-      <div className="mb-4">
+      <div className="mb-4 text-center">
         <label className="mr-2">Start Date:</label>
         <input
           type="date"
@@ -38,7 +38,7 @@ const Graph = ({ attendanceData }) => {
           className="border border-gray-300 rounded px-2 py-1"
         />
       </div>
-      <div className="mb-4">
+      <div className="mb-4 text-center">
         <label className="mr-2">End Date:</label>
         <input
           type="date"
@@ -58,7 +58,7 @@ const Graph = ({ attendanceData }) => {
             yaxis: { title: "Total Hours", automargin: true },
           }}
           style={{ width: "100%", height: "100%" }}
-          className="md:max-w-xl md:mx-auto" 
+          className="md:max-w-xl md:mx-auto"
         />
       </div>
     </div>
