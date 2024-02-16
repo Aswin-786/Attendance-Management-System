@@ -6,15 +6,25 @@ const LeaveRequest = require('../../../models/LeaveRequests');
 const Staff = require("../../../models/Staff");
 
 // Route to save attendance data
-router.post("/attendance/:userId", authenticateUser, restrictToRole('staff'), async (req, res) => {  
+router.post("/attendance/:userId", authenticateUser, restrictToRole('staff'), async (req, res) => {
   const { userId } = req.params;
   const { date, checkIn, checkOut, totalHours } = req.body;
   try {
+    console.log('normal date',date)
+    // Check if there is an approved leave request for this date
+    const x = await LeaveRequest.findOne({ worker: userId, leaveDate: date });
+    console.log('xx',x);
+    const leaveRequest = await LeaveRequest.findOne({ worker: userId, leaveDate: date, status: 'approved' });
+    if (leaveRequest) {
+      return res.status(400).json({ message: "Attendance cannot be marked for an approved leave date" });
+    }
+
     // Check if attendance data for this date already exists
     const existingAttendance = await Attendance.findOne({ worker: userId, date });
     if (existingAttendance) {
       return res.status(400).json({ message: "Attendance data for this date already exists" });
     }
+
     // Save new attendance data
     const newAttendance = new Attendance({
       worker: userId,
@@ -30,6 +40,7 @@ router.post("/attendance/:userId", authenticateUser, restrictToRole('staff'), as
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 // Route to submit leave request
 router.post("/leave-request/:userId", authenticateUser, restrictToRole('staff'), async (req, res) => {
