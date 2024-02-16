@@ -10,11 +10,9 @@ router.post("/attendance/:userId", authenticateUser, restrictToRole('staff'), as
   const { userId } = req.params;
   const { date, checkIn, checkOut, totalHours } = req.body;
   try {
-    console.log('normal date',date)
     // Check if there is an approved leave request for this date
     const x = await LeaveRequest.findOne({ worker: userId, leaveDate: date });
-    console.log('xx',x);
-    const leaveRequest = await LeaveRequest.findOne({ worker: userId, leaveDate: date, status: 'approved' });
+    const leaveRequest = await LeaveRequest.findOne({ worker: userId, leaveDate: date, status: 'accepted' });
     if (leaveRequest) {
       return res.status(400).json({ message: "Attendance cannot be marked for an approved leave date" });
     }
