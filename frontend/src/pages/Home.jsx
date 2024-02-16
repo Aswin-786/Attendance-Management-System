@@ -12,18 +12,41 @@ const Home = () => {
   const loginRoute = "/login";
 
   // Render appropriate component based on user role
-  const renderDashboard = () => {
+  const renderDashboardLink = () => {
     switch (userRole) {
       case "admin":
-        return <Link to={adminDashboardRoute} >Dashboard</Link>;
+        return (
+          <Link
+            className="font-bold text-xl hover:opacity-70 my-3 bg-gray-300 px-4 py-3 rounded-md cursor-pointer"
+            to={adminDashboardRoute}
+          >
+            Dashboard
+          </Link>
+        );
       case "staff":
-        return <Link to={staffDashboardRoute}>Dashboard</Link>;
+        return (
+          <Link
+            className="font-bold text-xl hover:opacity-70 my-3 bg-gray-300 px-4 py-3 rounded-md cursor-pointer"
+            to={staffDashboardRoute}
+          >
+            Dashboard
+          </Link>
+        );
       default:
-        return <Link to={loginRoute}>Dashboard</Link>;
+        return <Link className="font-bold text-xl hover:opacity-70 my-3 bg-gray-300 px-4 py-3 rounded-md cursor-pointer" to={loginRoute}>Login</Link>;
     }
   };
 
-  return <>{renderDashboard()}</>;
+  return (
+    <div className="flex flex-col items-center justify-center md:py-8 py-5">
+      <h1 className="md:text-4xl text-2xl font-bold mb-4">Attendance Management System</h1>
+      <p className="text-lg mb-4 py-5">
+        Welcome to the Attendance Management System. Please log in to access
+        your dashboard.
+      </p>
+      {renderDashboardLink()}
+    </div>
+  );
 };
 
 export default Home;

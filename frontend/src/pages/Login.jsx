@@ -7,13 +7,15 @@ import { userState } from "../store/atoms/User";
 
 const Login = () => {
   const setUser = useSetRecoilState(userState);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: "t@t.com",
     password: "123456",
-    role: "admin", 
+    role: "admin",
   });
-  const navigate = useNavigate();
+
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,9 +27,11 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null); // Reset error state on each form submission
+
     // Check if a role is selected
     if (!formData.role) {
-      alert("Please select a role (admin/staff)");
+      setError("Please select a role (admin/staff)");
       return;
     }
 
@@ -38,43 +42,41 @@ const Login = () => {
       } else if (formData.role === "staff") {
         url = "/login/staff";
       }
-      const response = await axios.post(BASE_URL+url, {
+      const response = await axios.post(BASE_URL + url, {
         email: formData.email,
         password: formData.password,
       });
       console.log(response.data);
-         if (response.status === 200) {
-           localStorage.setItem("token", response.data.token);
-           if (formData.role === "staff") {
-             setUser({
-               isLoading: false,
-               userName: response.data.userName,
-               userId: response.data.userId,
-               role: response.data.role,
-             });
-             navigate("/staff/dashboard");
-           } else {
-             setUser({
-               isLoading: false,
-               userName: response.data.userName,
-               userId: response.data.userId,
-               role: response.data.role,
-             });
-             navigate("/admin/dashboard");
-           }
-         }
+      if (response.status === 200) {
+        localStorage.setItem("token", response.data.token);
+        setUser({
+          isLoading: false,
+          userName: response.data.userName,
+          userId: response.data.userId,
+          role: response.data.role,
+        });
+        if (formData.role === "staff") {
+          navigate("/staff/dashboard");
+        } else {
+          navigate("/admin/dashboard");
+        }
+      }
     } catch (error) {
       console.error("Error logging in:", error);
-      // Handle error (e.g., display error message)
+      setError("Invalid email or password. Please try again.");
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center ">
-      <h2 className="text-3xl font-bold mb-4">Login Page</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <div className="flex flex-col items-center justify-center">
+      <h2 className="md:text-3xl text-xl font-bold mb-4 md:py-5 py-4">Login 
+      </h2>
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 border border-gray-300 rounded-lg shadow-md p-6"
+      >
         <div className="flex flex-col gap-2">
-          <label>email:</label>
+          <label>Email:</label>
           <input
             type="text"
             name="email"
@@ -120,6 +122,7 @@ const Login = () => {
             </label>
           </div>
         </div>
+        {error && <p className="text-red-500">{error}</p>}
         <button
           type="submit"
           className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-700"

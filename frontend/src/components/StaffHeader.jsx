@@ -12,15 +12,17 @@ const StaffHeader = ({ buttons, defaultComponent }) => {
 
   return (
     <>
-      <div className="flex justify-between items-center bg-gray-200 p-4">
+      <div className="flex justify-between items-center bg-gray-300 p-4">
         <div>
-          <h1 className="text-xl font-bold">Staff Dashboard</h1>
+          <h1 className="md:text-xl text-lg font-bold">Staff Dashboard</h1>
         </div>
         <div className="flex gap-4">
           {buttons.map((button) => (
             <button
               key={button.label}
-              className="text-blue-500 hover:underline"
+              className={`text-blue-500 hover:underline hover:opacity-70 md:text-base text-sm ${
+                activeComponent === button.component && "font-bold"
+              }`}
               onClick={() => handleComponentChange(button.component)}
             >
               {button.label}

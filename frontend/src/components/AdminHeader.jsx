@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import AttendanceMarker from "./AttendanceMarker";
-import LeaveRequest from "./LeaveRequest";
-import LeaveStatus from "./LeaveStatus";
 import StaffList from "./StaffLitst";
 import AdminLeaveStatus from "./AdminLeaveStatus";
 
@@ -14,21 +11,21 @@ const AdminHeader = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center bg-gray-200 p-4">
+      <div className="flex justify-between items-center bg-gray-300 p-4">
         <div>
-          <h1 className="text-xl font-bold">Admin Dashboard</h1>
+          <h1 className="md:text-xl text-lg font-bold">Admin Dashboard</h1>
         </div>
         <div className="flex gap-4">
           <button
-            className={`text-blue-500 hover:underline ${
+            className={`text-blue-500 hover:underline hover:opacity-70 ${
               activeComponent === "Staff List" && "font-bold"
             }`}
             onClick={() => handleComponentChange("Staff List")}
           >
             Staff List
           </button>
-                  <button
-            className={`text-blue-500 hover:underline ${
+          <button
+            className={`text-blue-500 hover:underline hover:opacity-70 ${
               activeComponent === "LeaveStatus" && "font-bold"
             }`}
             onClick={() => handleComponentChange("LeaveStatus")}

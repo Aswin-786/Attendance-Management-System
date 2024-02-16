@@ -22,18 +22,22 @@ const AttendanceMarker = () => {
     console.log(checkInAMPM);
     // Make API call to save attendance
     try {
-      const response = await axios.post(`${BASE_URL}/dashboard/staff/attendance/${userId}`, {
-        checkIn,
-        checkOut,
-        checkInAMPM,
-        checkOutAMPM,
-        date,
-        totalHours,
-      },{
+      const response = await axios.post(
+        `${BASE_URL}/dashboard/staff/attendance/${userId}`,
+        {
+          checkIn,
+          checkOut,
+          checkInAMPM,
+          checkOutAMPM,
+          date,
+          totalHours,
+        },
+        {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
           },
-        });
+        }
+      );
       console.log("Attendance saved successfully:", response.data);
     } catch (error) {
       console.error("Error saving attendance:", error);
@@ -59,7 +63,7 @@ const AttendanceMarker = () => {
 
   const parseTime = (time) => {
     const [hours, minutes] = time.split(":").map(Number);
-    const milliseconds = (hours * 60 + minutes) * 60 * 1000; // Convert hours and minutes to milliseconds
+    const milliseconds = (hours * 60 + minutes) * 60 * 1000;
     return milliseconds;
   };
 
@@ -72,12 +76,11 @@ const AttendanceMarker = () => {
   // Calculate min date (today)
   const today = new Date().toISOString().split("T")[0];
 
-  // Infer AM/PM for check-in and check-out
   const checkInAMPM = inferAMPM(checkIn);
   const checkOutAMPM = inferAMPM(checkOut);
   return (
-    <div className="max-w-md mx-auto">
-      <h2 className="text-xl font-bold mb-4">Attendance Register</h2>
+    <div className="max-w-md mx-auto bg-white shadow-md p-6 rounded-lg md:my-8 my-3">
+      <h2 className="text-xl font-bold mb-4 underline text-center">Attendance Register</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block mb-1">Date:</label>
@@ -109,7 +112,7 @@ const AttendanceMarker = () => {
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-700"
+          className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-700 w-full"
         >
           Submit
         </button>

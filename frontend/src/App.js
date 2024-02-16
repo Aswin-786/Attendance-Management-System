@@ -1,16 +1,16 @@
-import React, { Suspense } from "react";
+import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import Layout from "./pages/Layout";
-import Home from "./pages/Home";
-import Choose from "./pages/Choose";
-
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import StaffDashboard from "./components/StaffDashboard";
-import AdminDashboard from "./components/AdminDashboard";
+import Loading from "./components/Loading";
 import { RecoilRoot } from "recoil";
 import InitUser from "./components/InitUser";
-import Loading from "./components/Loading";
+
+const Home = lazy(() => import("./pages/Home"));
+const Choose = lazy(() => import("./pages/Choose"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const StaffDashboard = lazy(() => import("./components/StaffDashboard"));
+const AdminDashboard = lazy(() => import("./components/AdminDashboard"));
 
 function App() {
   return (

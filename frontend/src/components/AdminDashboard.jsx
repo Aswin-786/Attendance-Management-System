@@ -19,8 +19,10 @@ const AdminDashboard = () => {
       return null;
     } 
   return (
-    <AdminHeader />
-  )
+    <>
+      <AdminHeader />
+    </>
+  );
 }
 
 export default AdminDashboard

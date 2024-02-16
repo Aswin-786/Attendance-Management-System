@@ -5,6 +5,7 @@ import { userState } from "../store/atoms/User";
 import { BASE_URL } from "../shared/config";
 
 const InitUser = () => {
+  //for setting the user
   const setUser = useSetRecoilState(userState);
 
   useEffect(() => {

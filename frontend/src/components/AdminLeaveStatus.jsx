@@ -37,7 +37,6 @@ const AdminLeaveStatus = () => {
           },
         }
       );
-      // Optionally, update the local state or perform any other actions upon successful update
     } catch (error) {
       console.error("Error updating leave status:", error);
     }
@@ -53,16 +52,14 @@ const AdminLeaveStatus = () => {
     );
     setLeaveRequests(response.data);
   };
-  // Filter leave requests with status 'pending'
+  // only show 'pending' status contents
   const pendingLeaveRequests = leaveRequests.filter(
     (request) => request.status === "pending"
   );
 
-  console.log('adlkjfal',);
-
   return (
     <div className="max-w-screen-lg mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-4">Admin Leave Status</h2>
+      <h2 className="text-xl  font-bold mb-4 text-center underline">Admin Leave Status</h2>
       <div className="overflow-x-auto">
         <table className="table-auto w-full border-collapse">
           <thead>

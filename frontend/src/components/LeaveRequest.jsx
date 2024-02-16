@@ -13,7 +13,6 @@ const LeaveRequest = () => {
   const [reason, setReason] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,8 +40,7 @@ const LeaveRequest = () => {
       setDate("");
       setLeaveType("full_day");
       setReason("");
-      setError('');
-   
+      setError("");
     } catch (error) {
       // Handle error response
       if (
@@ -77,8 +75,8 @@ const LeaveRequest = () => {
   const today = new Date().toISOString().split("T")[0];
 
   return (
-    <div className="max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Leave Request</h2>
+    <div className="max-w-md mx-auto bg-white shadow-md p-6 rounded-lg md:my-5 my-3">
+      <h2 className="text-2xl font-bold mb-4 underline text-center">Leave Request</h2>
       {error && <p className="text-red-500">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -148,7 +146,7 @@ const LeaveRequest = () => {
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-700"
+          className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-700 w-full"
         >
           Submit
         </button>
