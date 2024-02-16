@@ -3,6 +3,7 @@ const router = express.Router();
 const { authenticateUser, restrictToRole } = require('../../../middleware/authMiddleware');
 const Attendance = require('../../../models/Attendance');
 const LeaveRequest = require('../../../models/LeaveRequests');
+const Staff = require("../../../models/Staff");
 
 // Route to save attendance data
 router.post("/attendance/:userId", authenticateUser, restrictToRole('staff'), async (req, res) => {
@@ -37,7 +38,7 @@ router.post("/attendance/:userId", authenticateUser, restrictToRole('staff'), as
 
 // Route to submit leave request
 router.post("/leave-request/:userId", authenticateUser, restrictToRole('staff'), async (req, res) => {
-  console.log('hihi');
+  // console.log('hihi');
   const { userId } = req.params;
   const { leaveDate, type, reason } = req.body;
 
@@ -76,6 +77,29 @@ router.get("/leave-status/:userId", authenticateUser, restrictToRole('staff'), a
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+router.get("/:userId", authenticateUser, async (req, res) => {
+  try {
+    // Get the user ID from the URL params
+    const { userId } = req.params;
+
+    // Fetch staff details for the specified user ID from the database
+    const staffDetails = await Staff.findById(userId);
+    
+    // Check if staff details were found
+    if (!staffDetails) {
+      return res.status(404).json({ message: "Staff details not found for this user" });
+    }
+
+    // Send the staff details as a response
+    res.status(200).json(staffDetails);
+  } catch (error) {
+    console.error("Error fetching staff details:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 
 
 router.get('/',(req,res) => {

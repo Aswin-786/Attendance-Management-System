@@ -84,6 +84,20 @@ router.get("/leavestatus", authenticateUser, restrictToRole('admin'), async (req
 });
 
 
+// Route to fetch attendance data for a specific user
+router.get("/attendance/:userId", authenticateUser, restrictToRole('admin'), async (req, res) => {
+  try {
+    const { userId } = req.params;
+    console.log('check');
+    const attendanceData = await Attendance.find({ worker: userId });
+    res.status(200).json(attendanceData);
+  } catch (error) {
+    console.error("Error fetching attendance data:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 
 
 module.exports = router;

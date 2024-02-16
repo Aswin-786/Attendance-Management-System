@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, } from "react";
 import axios from "axios";
 import { BASE_URL } from "../shared/config";
+import Dummy from "./Graph";
+import Graph from "./Graph";
 
 const ViewStaff = ({ userId }) => {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
+  const [attendanceData, setAttendanceData] = useState(null);
   const token = localStorage.getItem("token");
+
+  console.log(userId);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get(
-          `${BASE_URL}/dashboard/admin/user/${userId}`,
+          `${BASE_URL}/dashboard/staff/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -19,15 +24,33 @@ const ViewStaff = ({ userId }) => {
           }
         );
         setUserData(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
         setError("An error occurred while fetching user data.");
       }
     };
 
+    const fetchAttendanceData = async () => {
+      try {
+        const response = await axios.get(
+          `${BASE_URL}/dashboard/admin/attendance/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setAttendanceData(response.data);
+      } catch (error) {
+        console.error("Error fetching attendance data:", error);
+        setError("An error occurred while fetching attendance data.");
+      }
+    };
+
     fetchUserData();
-  }, [userId]); // Fetch user data when userId prop changes
+    fetchAttendanceData();
+  }, [userId, token]); // Fetch user data and attendance data when userId or token changes
+
 
   return (
     <div className="max-w-md mx-auto">
@@ -45,11 +68,12 @@ const ViewStaff = ({ userId }) => {
           <p>
             <strong>Location:</strong> {userData.location}
           </p>
-          {/* Add more user details here */}
         </div>
       ) : (
         <p>Loading...</p>
       )}
+
+      <Graph attendanceData={attendanceData} />
     </div>
   );
 };
