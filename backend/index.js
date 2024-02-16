@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 // const userRouter = require("./routes/user");
 // const postRouter = require("./routes/post");
 const { authenticateUser, restrictToRole } = require('./middleware/authMiddleware');
+const staffRouter = require("./routes/dashboard/staff/staff");
 const app = express();
 
 app.use(express.json());
@@ -38,6 +39,8 @@ app.use("/login/admin", require("./routes/login/admin"));
 app.use("/login/staff", require("./routes/login/staff"));
 
 app.use("/profile", authenticateUser, require("./routes/profile/profile"));
+
+app.use("/dashboard/staff", staffRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "test test 10" });

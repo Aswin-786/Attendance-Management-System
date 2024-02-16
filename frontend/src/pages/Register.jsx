@@ -47,11 +47,9 @@ const Register = () => {
        if (response.status === 201) {
 
          localStorage.setItem("token", response.data.token);
-         if (isStaffRegister) {
-           navigate("/staff/dashboard");
-         } else {
-           navigate("/admin/dashboard");
-         }
+
+           navigate("/login");
+
        }
 
     } catch (error) {
