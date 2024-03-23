@@ -9,7 +9,7 @@ const ViewStaff = ({ userId }) => {
   const [attendanceData, setAttendanceData] = useState(null);
   const [reportData, setReportData] = useState(null);
   const [loadingReport, setLoadingReport] = useState(false);
-  const [selectedMonth, setSelectedMonth] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState('0');
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -52,11 +52,11 @@ const ViewStaff = ({ userId }) => {
     fetchAttendanceData();
   }, [userId, token]);
 
-  const handleFetchReport = async () => {
+  const handleFetchReport = async (event) => {
     try {
       setLoadingReport(true);
       const response = await axios.get(
-        `${BASE_URL}/dashboard/admin/report/${userId}`,
+        `${BASE_URL}/dashboard/admin/report/${userId}/${event.target.value}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -74,6 +74,9 @@ const ViewStaff = ({ userId }) => {
 
   const handleMonthChange = (event) => {
     setSelectedMonth(event.target.value);
+    console.log(event.target.value);
+    //api
+    handleFetchReport();
   };
 
  const filterReportByMonth = (reportType) => {
@@ -82,15 +85,15 @@ const ViewStaff = ({ userId }) => {
      reportType === "attendance"
        ? reportData.attendanceData
        : reportData.leaveRequests;
-   if (!selectedMonth) return data;
-
-   return data.filter((item) => {
-     const month =
-       new Date(
-         reportType === "attendance" ? item.date : item.leaveDate
-       ).getMonth() + 1;
-     return month === parseInt(selectedMonth);
-   });
+   //if (!selectedMonth) return data;
+  return data;
+  //  return data.filter((item) => {
+  //    const month =
+  //      new Date(
+  //        reportType === "attendance" ? item.date : item.leaveDate
+  //      ).getMonth() + 1;
+  //    return month === parseInt(selectedMonth);
+  //  });
  };
 
   // Array of month names

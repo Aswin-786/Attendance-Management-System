@@ -24,7 +24,7 @@ if (!mongoUrl) {
 }
 mongoose.connect(mongoUrl);
 
-//admin login
+//admin register
 app.use("/register/admin", require("./routes/register/admin"));
 
 // Register/Staff route

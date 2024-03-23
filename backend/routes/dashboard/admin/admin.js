@@ -77,7 +77,7 @@ router.get("/leavestatus", authenticateUser, restrictToRole('admin'), async (req
 // Route to fetch attendance data for a specific user
 router.get("/attendance/:userId", authenticateUser, restrictToRole('admin'), async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req.params;    
     console.log('check');
     const attendanceData = await Attendance.find({ worker: userId });
     res.status(200).json(attendanceData);
@@ -88,13 +88,27 @@ router.get("/attendance/:userId", authenticateUser, restrictToRole('admin'), asy
 });
 
 // Route to generate a report for a particular user
-router.get("/report/:userId", authenticateUser, restrictToRole('admin'), async (req, res) => {
+router.get("/report/:userId/:selectedMonth", authenticateUser, restrictToRole('admin'), async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userId, selectedMonth } = req.params;
+    console.log(selectedMonth)
     // Fetch user's attendance data
-    const attendanceData = await Attendance.find({ worker: userId });
+    let attendanceData = await Attendance.find({ worker: userId });
     // Fetch user's leave requests
-    const leaveRequests = await LeaveRequest.find({ worker: userId, status:'accepted' });
+    let leaveRequests = await LeaveRequest.find({ worker: userId, status:'accepted' });
+
+    if (selectedMonth != '0') {
+     let a = attendanceData.filter((item) => {
+        const month = new Date(item.date).getMonth() + 1;
+        return month === parseInt(selectedMonth);
+      });
+    let b =  leaveRequests.filter((item) => {
+        const month = new Date(item.date).getMonth() + 1;
+        return month === parseInt(selectedMonth);
+      });
+      attendanceData = a;
+      leaveRequests= b
+    }   
     // Combine attendance and leave request data as needed for the report
     const report = {
       userId,
